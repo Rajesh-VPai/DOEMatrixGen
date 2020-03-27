@@ -24,7 +24,9 @@ Syntax highlighted code block
 **Bold** and _Italic_ and `Code` text
 
 [Link] (https://Rajesh-VPai.github.io/DOEMatrixGen) and ![Image] (src)
-
+### About DOEMatrixGen
+DOEMatrixGen is a core Java orthogonal Array Matrix Generator.
+It can generate Taguchi as well as Fisher Orthogonal Array Matrix. It contains an example of how to self test itself using OA.
 ```
 
 For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
