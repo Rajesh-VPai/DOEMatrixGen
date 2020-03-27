@@ -1,0 +1,10 @@
+Path= data\ 
+Length(Columns/Factors) = 10
+STATSMOREDATAFACTOR(Not Used) = 1 
+ROWSDOE (1 + Sigma((i=1 to NV) (Li-1)) : Tip: Use ROWSDOERecommended ) =12
+UseLevelsFromFile [Values(True,False)]= false
+UseLevelsFromArray [Values(True,False)](Remember to Update Array InitLevels in Code)= true
+UseFullFactorial [Values(True,False)]= True
+ClassicTaguchiAlg [Values(True,False)]= False
+LEVELS = 2
+HasSignal [Values(True,False)]= true
