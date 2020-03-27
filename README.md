@@ -23,7 +23,7 @@ Syntax highlighted code block
 
 **Bold** and _Italic_ and `Code` text
 
-[Link] (https://GitHub.com/Rajesh-VPai/DOEMatrixGen) and ![Image] (src)
+[Link] (https://Rajesh-VPai.github.io/DOEMatrixGen) and ![Image] (src)
 
 ```
 
