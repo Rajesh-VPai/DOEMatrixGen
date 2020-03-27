@@ -8,23 +8,12 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
 
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
 
 **Bold** and _Italic_ and `Code` text
 
 [Link] (https://Rajesh-VPai.github.io/DOEMatrixGen) and ![Image] (src)
-### About DOEMatrixGen
+# About DOEMatrixGen
 DOEMatrixGen is a core Java orthogonal Array Matrix Generator.
 It can generate Taguchi as well as Fisher Orthogonal Array Matrix. It contains an example of how to self test itself using OA.
 ```
