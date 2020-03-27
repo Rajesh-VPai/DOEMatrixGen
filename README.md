@@ -14,8 +14,8 @@ Markdown is a lightweight and easy-to-use syntax for styling your writing. It in
 
 [Link] (https://github.com/Rajesh-VPai/DOEMatrixGen) and ![Image] (src)
 #### About DOEMatrixGen
-`DOEMatrixGen is a core Java orthogonal Array Matrix Generator.
-It can generate Taguchi as well as Fisher Orthogonal Array Matrix. It contains an example of how to self test itself using OA.It contains copious documentation on the code.
+DOEMatrixGen is a core Java orthogonal Array Matrix Generator.
+It can generate Taguchi as well as Fisher Orthogonal Array Matrix. It contains an example of how to self test itself using Orthogonal Array for Testing. It contains copious documentation on the code.
 
 
 ### Jekyll Themes
