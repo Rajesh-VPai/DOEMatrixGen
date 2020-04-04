@@ -259,8 +259,8 @@ public class DOEColumnInputLevel {
                     Integer MyColType = Integer.parseInt(ProcessString(din, din.readLine()));
                     Integer MyColLevels = Integer.parseInt(ProcessString(din, din.readLine()));
                     if (MyColLevels > MatrixGenerator.LEVELS) {
+                        System.out.println(ConsoleColors.RED+"LEVELS IN FILE (" + MyColLevels + ")> LEVELS IN " + MatrixGenerator.ConfigFileName + ". Hence Reducing LEVELS to " + MatrixGenerator.LEVELS + ConsoleColors.RESET);
                         MyColLevels=MatrixGenerator.LEVELS;
-                        System.out.println(ConsoleColors.RED+"LEVELS IN FILE > LEVELS IN HyperDOEinputGeneral. Hence Reducing LEVELS to " + MyColLevels + ConsoleColors.RESET);
                     }
                     MatrixGenerator.LevelCntrlArrayPut(planeNum, ObjectColNum, MatrixGenerator.LevelMinIndex,1);
                     MatrixGenerator.LevelCntrlArrayPut(planeNum, ObjectColNum, MatrixGenerator.LevelMaxIndex,MyColLevels);

@@ -18,6 +18,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 import org.apache.log4j.Logger;
 
@@ -60,6 +61,8 @@ public class MatrixGenerator {
     
     //Signal Data Elements
    private static long OverallDupCount = 0;
+   private static long OverallUniqueCount = 0;
+   private static LinkedList<String> DupsList;
    //Variable for Levels Control
     private static int levelCntrl = 1;
     //Variable for Levels Control
@@ -85,6 +88,7 @@ public class MatrixGenerator {
     public static String[] MeanInputModeTracker;//SigLength :Number of Datum
     public static long[] Mode;//SigLength :Number of Datum:The Frequency of each  Value
     public static long[] ModeValue;//Value :Individual Different Datum
+    public static long[] ModeIndex;//Value :Individual Different Datum
 
     public static int[][] StrengthMode;    
     //LCG Variables
@@ -110,15 +114,15 @@ public class MatrixGenerator {
     // Just input the columns that you need. Rest are set to LEVELS
     // OR User to implement UseLevelsFromLEVELS=true/false
     private static int[][] InitLevels = {
-    {0, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, //Column, LevelMinIndex, LevelMaxIndex, LevelCtrlIndex, LastIssuedLevel, LastIssuedValue, FactorialRow1Lev, FactSpreadRow1Lev, FactRowRow1Lev, FactRowSpreadRow1Lev, FactorialRow3Lev, FactSpreadRow3Lev, FactRowRow3Lev, FactRowSpreadRow3Lev, FactorialNMinusLev, FactSpreadNMinusLev, FactRowNMinusLev, FactRowSpreadNMinusLev, 
-    {1, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {0, 1, 5/*2*/, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}, //Column, LevelMinIndex, LevelMaxIndex, LevelCtrlIndex, LastIssuedLevel, LastIssuedValue, FactorialRow1Lev, FactSpreadRow1Lev, FactRowRow1Lev, FactRowSpreadRow1Lev, FactorialRow3Lev, FactSpreadRow3Lev, FactRowRow3Lev, FactRowSpreadRow3Lev, FactorialNMinusLev, FactSpreadNMinusLev, FactRowNMinusLev, FactRowSpreadNMinusLev, 
+    {1, 1, 5/*2*/, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {2, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {3, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {4, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {5, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    {6, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {6, 1, 5/*2*/, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     {7, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-    {8, 1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {8, 1, 3/*2*/, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
     };
     public static int LevelMinIndex = 0;
     public static int LevelMaxIndex = 1;
@@ -222,8 +226,9 @@ public class MatrixGenerator {
                 DupCheckMatrixMode(planeNum);
             }
             System.out.print(System.lineSeparator());
+            
             long OverallDupCountDiff = OverallDupCount - OverallDupCountOrg;
-            System.out.println("Overall Duplicate Count=" + OverallDupCountDiff);
+            System.out.println("Overall Duplicate Count=" + OverallDupCountDiff + " OverallUniqueCount=" + OverallUniqueCount);
             AlgoParamLogger("Main", StartRowOrg, StartColOrg, DupCheckColStart, DupCheckColEnd, OverallDupCountOrg, MyStartROWSDOE, MyStartCOLMDOE, OverallDupCount);
 
         } catch (Exception HyperE) {
@@ -835,7 +840,6 @@ public static void GenerateArray(int planeNum) {
                 HistRow = getRowAsStringDataArray(planeNum, j, colDupCheckColStart, colDupCheckColEnd, false);
                 if ((CurrRow.length() == HistRow.length()) && (CurrRow.equalsIgnoreCase(HistRow))) {
                     RetValue = true;
-                    OverallDupCount++;
                     log.info("dupCombinationCol Got Duplicates in AlgoName=" + AlgoName + ": HistRow=" + j + " Curr row=" + row);
                     //log.error("dupCombinationRow HistRow =" + HistRow.toString());
                     log.info("dupCombinationCol HistRow(" + j + " =" + HistRow);
@@ -1235,23 +1239,23 @@ public static ByteBuffer getArrayDataArray() {
         NPRFactValue = LevelCntrlArrayGet(planeNum, col, AlgoFactRowFactIndex);
         if (NPRFactValue > 0) NPRSpreadValue= ROWSDOE/NPRFactValue;
         else NPRSpreadValue= 1;
-        LCG_Value = Expr_LCG_Value_Random(planeNum, AlgoName, 4, 1, 1, Levels);
-        LCG_levelCntrl = (int) Expr_LCG_Value_Random(planeNum, AlgoName, 4, 1, LCG_levelCntrl, Levels);
+        LCG_Value = LCG_Value_Random(planeNum, AlgoName, 4, 1, 1, Levels);
+        LCG_levelCntrl = (int) LCG_Value_Random(planeNum, AlgoName, 4, 1, LCG_levelCntrl, Levels);
         LCG_TempValue = LCG_TempValue(planeNum, AlgoName, row, col, RowSub, ColSub, Value, Levels);
         if (LCG_Value == 1) {
-            LCG_Value = Expr_LCG_Value_Random(planeNum, AlgoName, 4, 1, LCG_Value, Levels);
+            LCG_Value = LCG_Value_Random(planeNum, AlgoName, 4, 1, LCG_Value, Levels);
         } else {
-            LCG_Value = Expr_LCG_Value_Random(planeNum, AlgoName, 4, 1, 1, Levels);
+            LCG_Value = LCG_Value_Random(planeNum, AlgoName, 4, 1, 1, Levels);
         }
         if (LCG_FactValue == 1) {
-            LCG_FactValue = Expr_LCG_Factorial_Random(planeNum, AlgoName, FactValue, SpreadValue, 4, 1, Levels);
+            LCG_FactValue = LCG_Factorial_Random(planeNum, AlgoName, FactValue, SpreadValue, 4, 1, Levels);
         } else {
-            LCG_FactValue = Expr_LCG_Factorial_Random(planeNum, AlgoName, LCG_FactValue, SpreadValue, 4, 1, Levels);
+            LCG_FactValue = LCG_Factorial_Random(planeNum, AlgoName, LCG_FactValue, SpreadValue, 4, 1, Levels);
         }
         if ((LCG_NPRFactValue == 1)&&(NPRFactValue > 1)&&(NPRSpreadValue > 1)) {
-            LCG_NPRFactValue = Expr_LCG_Factorial_Random(planeNum, AlgoName, NPRFactValue, NPRSpreadValue, 4, 1, Levels);
+            LCG_NPRFactValue = LCG_Factorial_Random(planeNum, AlgoName, NPRFactValue, NPRSpreadValue, 4, 1, Levels);
         } else {
-            LCG_NPRFactValue = Expr_LCG_Factorial_Random(planeNum, AlgoName, LCG_NPRFactValue, NPRSpreadValue, 4, 1, Levels);
+            LCG_NPRFactValue = LCG_Factorial_Random(planeNum, AlgoName, LCG_NPRFactValue, NPRSpreadValue, 4, 1, Levels);
         }
 
         if ((SpreadValue > 0) ) {
@@ -1363,7 +1367,7 @@ public static long SimpleModuloLevel(int planeNum, String AlgoName, long row, lo
         //    levelCntrl=HyperCubeArray[planeNum].MatrixArray.LevelCntrlArrayGet(planeNum, col, LevelMinIndex);
         return levelCntrl;
     }
- public static long Expr_LCG_Value_Random(int planeNum, String AlgoName, long a, long c, long Xn, long Modulus) {
+ public static long LCG_Value_Random(int planeNum, String AlgoName, long a, long c, long Xn, long Modulus) {
         //Value = (a * Xn + c) % (Modulus + 1);
         
         Map<String, Double> variables = new HashMap<>();
@@ -1414,7 +1418,7 @@ public static long SimpleModuloLevel(int planeNum, String AlgoName, long row, lo
         }
         return ((long) Xnplus1);
     }
-public static long Expr_LCG_Factorial_Random(int planeNum, String AlgoName, long Xn, long FactorialSpread, long a, long c, long Modulus) {
+public static long LCG_Factorial_Random(int planeNum, String AlgoName, long Xn, long FactorialSpread, long a, long c, long Modulus) {
         //Value = (a * Factorial + c) % (FactorialSpread + 1);
         Map<String, Double> variables = new HashMap<>();
         Map<String, String> variablesDiff = new HashMap<>();
@@ -1468,37 +1472,34 @@ public static boolean DupCheckMatrixMode(int planeNum) {
         boolean flag = false;
         long a = 0;
         int j = 0;
-        for ( i = 0; i < ROWSDOE; i++) {
-            Mode[i] = 0;
-            ModeValue[i] = 0;
-        }
         for (i = 0; i < ROWSDOE; i++) {
             a = getRowAsInteger(planeNum, i, Length);
             for(m=0; m <= j;m++) {
-               if ((a==ModeValue[m])&&(ModeValue[m] != 0.0)) 
+               if ((a==ModeValue[m])) 
                {
-                   Mode[j]=Mode[j]+1;
-                   log.fatal("DupCheckMatrixMode:Duplicate row=(i)=" + i + " j=" + j + " Integer(a)=" + a + " Freq="+ Mode[j]);
+                   Mode[m]=Mode[m]+1;
+                   log.fatal("DupCheckMatrixMode:Duplicate row=(i)=" + i + " m=" + m + " j=" + j + " Integer(a)=" + a + " Freq="+ Mode[m]);
+                   OverallDupCount++;
+                   DupsList.add(i+"@"+m);
                    break;
                }
             }
             if (m >=j) {
-                   ModeValue[j] = (int) a;
-                   Mode[j]=1;
+                   ModeValue[j] = a;
+                   Mode[j]++;
+                   ModeIndex[j]=i;
                    //log.fatal("DupCheckMatrixMode:Inserting row=(i)=" + i + " ModeValue["+ j +"]=" + ModeValue[j] + " Integer(a)=" + a + " Freq="+ Mode[j]);
                    j++;
                }
         }
         log.fatal("DupCheckMatrixMode:ROWSDOE=" + ROWSDOE + " Mode.length(j)=" + j);
         for (k = 0; k < j; k++) {
-            //getComputeRowInputMode(planeNum, k, LocalLength, a, j);
-            //a = this.getRowAsInteger(planeNum, k, LocalLength);
             if ( (Mode[k] > 1)) {
                 log.fatal("DupCheckMatrix:Array Incomplete and with Duplicates duplicate Row k=" + k + " MeanOutputModeTracker=" + MeanInputModeTracker[k] + "ModeValue[k]=" + ModeValue[k] + " Mode[k]=" + Mode[k] + " i=" + i);
                 flag = true;
-                //return true;
             }
         }
+        OverallUniqueCount=j;
         if (flag == false) {
             log.fatal("DupCheckMatrix:No duplicates for Whole Array ");
             System.out.println("DupCheckMatrix:No duplicates for Whole Array ");
@@ -1573,17 +1574,18 @@ public static double getLevelValuePair(int col,double Level){
             EqnParsed[i]=0;
         }
         MeanInputModeTracker = new String[(int) ROWSDOE];
-        Mode = new long[(int) ROWSDOE];// Needs to be improved as this is a wastage of space
-        ModeValue = new long[(int) ROWSDOE];// Needs to be improved as this is a wastage of space
+        Mode = new long[(int) ROWSDOE];// Needs to be improved as this is a wastage of space. Can be reduced to ROWSDOE/LEVELS
+        ModeValue = new long[(int) ROWSDOE];// Needs to be improved as this is a wastage of space. Can be reduced to ROWSDOE/LEVELS
+        ModeIndex = new long[(int) ROWSDOE];// Needs to be improved as this is a wastage of space. Can be reduced to ROWSDOE/LEVELS
         for (int i = 0; i < ROWSDOE; i++) {
             MeanInputModeTracker[i] = new String("");
             Mode[i] = 0;
-            ModeValue[i] = 0;
+            ModeValue[i] =0;
+            ModeIndex[i]=0;
         }
-        
+        DupsList=new LinkedList<String>();
         
         GenerateDOELatin(0,ROWSDOE,Length);
-        
         System.out.print(System.lineSeparator());
         System.out.print(System.lineSeparator());
         System.out.println("Final Completed DOE Matrix:");
@@ -1604,7 +1606,6 @@ public static double getLevelValuePair(int col,double Level){
     }
     public static void printDataOutput(int planeNum) {
         try {
-            int i = 0, j = 0, k = 0, a = 0, b = 0;
             int NumROWSDOE = (int) ROWSDOE;//matrix.limit();
             int NumCOLMDOE = (int) Length;
             int Levels=LEVELS;
@@ -1612,12 +1613,23 @@ public static double getLevelValuePair(int col,double Level){
             int FullFactUptoCol=0;
             int FullFactIndivCol=0;
             int c = 0,DataCount=0;
+            int i=0,j=0,k=0;
+            String DupString="";
+            String[] DataTemp;
             boolean FullFactFlag=false;
             System.out.print("DataArray:Header:");
             for (int r = 0; r < NumCOLMDOE; r++) {
                     System.out.print(r + " ");
             }
             System.out.print(System.lineSeparator());
+            if(DupsList.size() >0) {
+                DupString=DupsList.getFirst();
+                DataTemp=DupString.split("@");
+                if(DataTemp.length ==2) {
+                    i=Integer.parseInt(DataTemp[0]);
+                    k=Integer.parseInt(DataTemp[1]);
+                }
+            }
             for (int r = 0; r < NumROWSDOE; r++) {
                 System.out.print("Row=" + r + " ");
                 // Rajesh Pai:Not sure why c should start from 1;
@@ -1625,9 +1637,26 @@ public static double getLevelValuePair(int col,double Level){
                     System.out.print(DataArrayGet(planeNum, r, c) + " ");
                     Levels=Math.max(Levels, LevelCntrlArrayGet(0, c, LevelMaxIndex));
                 }
+                if(r==i)
+                {
+                    System.out.print(ConsoleColors.RED +" duplicate with Row=" +ModeIndex[k]  + ConsoleColors.RESET);
+                    j++;
+                    if(j < DupsList.size()) {
+                        DupString=DupsList.get(j);
+                        DataTemp=DupString.split("@");
+                        if(DataTemp.length ==2) {
+                            i=Integer.parseInt(DataTemp[0]);
+                            k=Integer.parseInt(DataTemp[1]);
+                        }                       
+                    }
+                }
+                else {
+                  System.out.print(ConsoleColors.GREEN +" Unique Row " + ConsoleColors.RESET);
+                }
                 System.out.print(System.lineSeparator());
             }
             System.out.print(System.lineSeparator());
+            System.out.println("Overall DupsList.size()=" + DupsList.size() + " OverallDupCount=" + OverallDupCount + " OverallUniqueCount=" + OverallUniqueCount);
             System.out.print(System.lineSeparator());
             System.out.println("Full Factorial Sum Of Levels Summary:" );
             System.out.print(System.lineSeparator());
@@ -1734,6 +1763,7 @@ public static double getLevelValuePair(int col,double Level){
         System.out.print(System.lineSeparator());
     }
     public static void main(String... args) {
+        //Uncomment below Line for Normal Usage of DOEMatrixGen
         pmain(args);
         //Starting Test Case :21 to 34, 39,40 , 101 to 104, 201 to 209
         String StartMyTestCase = "-1";//Test Case Number : Optiona :All or a Single Number
