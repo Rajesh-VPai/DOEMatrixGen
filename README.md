@@ -8,8 +8,6 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-
-
 **Bold** and _Italic_ and `Code` text
 
 [Link] (https://github.com/Rajesh-VPai/DOEMatrixGen) and ![Image] (src)
@@ -31,6 +29,12 @@ data Directory Structure
 - DOEMatrix : For CSV File Output of DOEMatrixGen OA
 - DOESelfTestConfig: For DOEMatrixGen Regression Testing  Config Files: Run the function(method):mainRegresssionDOE
 - LevelValues:Contains the Level Mapping for UseLevelsFromFile=true
+
+Files in data Directory (Base):DOEinputGeneralDefault
+
+Files in LevelValues Directory:DOEColumninputLevelSignalNormal
+
+Files in DOESelfTestConfig Directory: All Files DOEinputGeneral000 to DOEinputGeneral029 + DOEinputGeneralDefault
 
 
 
