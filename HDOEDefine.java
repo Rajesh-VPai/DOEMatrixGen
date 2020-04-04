@@ -57,11 +57,11 @@ System.out.print(System.lineSeparator());
 System.out.printf("DOENew General Parameters Begin");
 System.out.print(System.lineSeparator());
 System.out.printf("Path = %s \n" ,MatrixGenerator.Path);
-System.out.printf("Length(Columns/Factors) = %d \n" ,MatrixGenerator.Length);
+System.out.printf("Length(Columns/Factors)(Overall Permutations =Levels^Length) = %d \n" ,MatrixGenerator.Length);
 
 System.out.printf("STATSMOREDATAFACTOR = %d \n" ,MatrixGenerator.STATSMOREDATAFACTOR);	
 System.out.printf("ROWSDOE(1 + Sigma((i=1 to NV) (Li-1)) : Tip: Use ROWSDOERecommended ) = %d \n" ,MatrixGenerator.ROWSDOE);
-System.out.printf("UseLevelsFromFile = %s \n",MatrixGenerator.UseLevelsFromFile);
+System.out.printf("UseLevelsFromFile (Remember to Update DOEColumninputLevelSignalNormal in data\\LevelValues Folder )= %s \n",MatrixGenerator.UseLevelsFromFile);
 System.out.printf("UseLevelsFromArray (Remember to Update Array InitLevels in Code) = %s \n",MatrixGenerator.UseLevelsFromArray);
 System.out.printf("UseFullFactorial = %s \n" ,MatrixGenerator.UseFullFactorial);
 System.out.printf("ClassicTaguchiAlg = %s \n" ,MatrixGenerator.ClassicTaguchiAlg);
