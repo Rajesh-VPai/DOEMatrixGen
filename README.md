@@ -15,7 +15,7 @@ Markdown is a lightweight and easy-to-use syntax for styling your writing. It in
 DOEMatrixGen is a core Java orthogonal Array Matrix Generator.
 It can generate Taguchi as well as Fisher Orthogonal Array Matrix. It supports any condition of mixed levels. It contains an example of how to self test itself using Orthogonal Array for Testing. It contains copious documentation on the code. Code does not throw any Java exception.
 
-Development and Test Environment: Windows XP and Java 7 & Neteans 8.2
+Development and Test Environment: Windows XP and Java 7 & Netbeans 8.2
 
 ##### Project Directory Structure
 Available in DOEMatrix.zip
