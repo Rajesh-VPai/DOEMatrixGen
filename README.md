@@ -14,8 +14,12 @@ Markdown is a lightweight and easy-to-use syntax for styling your writing. It in
 #### About DOEMatrixGen
 DOEMatrixGen is a core Java orthogonal Array Matrix Generator.
 It can generate Taguchi as well as Fisher Orthogonal Array Matrix. It supports any condition of mixed levels. It contains an example of how to self test itself using Orthogonal Array for Testing. It contains copious documentation on the code. Code does not throw any Java exception.
+- DOEMatrixGen allows full degrees of freedom to the User. The User can generate an OA for any number of runs(rows), any factors (columns) ,any permutation of mixed levels. 
+- At the core, the DOEMatrixGen uses a simple modulo counter to generate the Full factorial OA. It also has a classical Taguchi algorithm function that generates pseudo algorithmic (but not full factorial nor pseudo random) cell value. The cell value is reffered to as partial OA.
+- The DOEMatrixGen flags off if the runs are unique or duplicate.
+- It also calculates the optimal run(rows) for the given levels and factors.(ROWSDOErecommended).
 
-Development and Test Environment: Windows XP and Java 7 & Netbeans 8.2
+- Development and Test Environment: Windows XP and Java 7 & Netbeans 8.2
 
 ##### Project Directory Structure
 Available in DOEMatrix.zip
