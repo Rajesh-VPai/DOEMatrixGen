@@ -3,8 +3,23 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package DOEMatrixGen;
+package DOETest;
 
+import static RandomNumber.UserResearchStudy.Path;
+import static RandomNumber.UserResearchStudy.Xn_XOR;
+import static RandomNumber.UserResearchStudy.Xn_LCG;
+import static RandomNumber.UserResearchStudy.Xn_LCGDyDx;
+import static RandomNumber.UserResearchStudy.Xn_LCG3;
+import static RandomNumber.UserResearchStudy.Xn_LCGDyDx4;
+import static RandomNumber.UserResearchStudy.Modulus;
+import static RandomNumber.UserResearchStudy.NoOfBits;
+import static RandomNumber.UserResearchStudy.MaxExponent;
+import static RandomNumber.UserResearchStudy.ModulusEncrypt;
+import static RandomNumber.UserResearchStudy.StudyType;
+import static RandomNumber.UserResearchStudy.a;
+import static RandomNumber.UserResearchStudy.c;
+import static RandomNumber.UserResearchStudy.b;
+import static RandomNumber.UserResearchStudy.d;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -27,20 +42,26 @@ public class HDOEDefine {
 //DataInputStream din=new DataInputStream(fp);
 
 BufferedReader din=new BufferedReader(new InputStreamReader(fp));
-MatrixGenerator.Path=ProcessString(din.readLine());
+Path=ProcessString(din.readLine());
 
-MatrixGenerator.Length=Integer.parseInt(ProcessString(din.readLine()));	
-MatrixGenerator.STATSMOREDATAFACTOR=Integer.parseInt(ProcessString(din.readLine()));		
-MatrixGenerator.ROWSDOE=Integer.parseInt(ProcessString(din.readLine()));
-MatrixGenerator.UseLevelsFromFile=Boolean.parseBoolean(ProcessString(din.readLine()));
-MatrixGenerator.UseLevelsFromArray=Boolean.parseBoolean(ProcessString(din.readLine()));
-MatrixGenerator.UseFullFactorial=Boolean.parseBoolean(ProcessString(din.readLine()));
-MatrixGenerator.ClassicTaguchiAlg=Boolean.parseBoolean(ProcessString(din.readLine()));
-MatrixGenerator.LEVELS=Integer.parseInt(ProcessString(din.readLine()));
+Xn_XOR=Integer.parseInt(ProcessString(din.readLine()));	
+Xn_LCG =Integer.parseInt(ProcessString(din.readLine()));
+Xn_LCGDyDx =Integer.parseInt(ProcessString(din.readLine()));
+Xn_LCG3=Integer.parseInt(ProcessString(din.readLine()));	
+Xn_LCGDyDx4=Integer.parseInt(ProcessString(din.readLine()));
+
+Modulus=Integer.parseInt(ProcessString(din.readLine()));
+NoOfBits=Integer.parseInt(ProcessString(din.readLine()));
+MaxExponent=Integer.parseInt(ProcessString(din.readLine()));
+ModulusEncrypt=Integer.parseInt(ProcessString(din.readLine()));
+
 
 // High Level Variables for Signal Noise Nature
-MatrixGenerator.HasSignal=Boolean.parseBoolean(ProcessString(din.readLine()));
-
+a=Integer.parseInt(ProcessString(din.readLine()));
+c=Integer.parseInt(ProcessString(din.readLine()));
+b=Integer.parseInt(ProcessString(din.readLine()));
+d=Integer.parseInt(ProcessString(din.readLine()));
+StudyType=ProcessString(din.readLine());
 fp.close();
 //log.error("GlblVars.Precision=" + GlblVars.Precision);
 } catch(Exception HyperDOEse){ 
@@ -56,19 +77,22 @@ public static void Myprintf()
 System.out.print(System.lineSeparator());
 System.out.printf("DOENew General Parameters Begin");
 System.out.print(System.lineSeparator());
-System.out.printf("Path = %s \n" ,MatrixGenerator.Path);
-System.out.printf("Length(Columns/Factors)(Overall Permutations =Levels^Length) = %d \n" ,MatrixGenerator.Length);
+System.out.printf("Path = %s \n" ,Path);
+System.out.printf("Xn_XOR = %d \n" ,Xn_XOR);
+System.out.printf("Xn_LCG = %d \n" ,Xn_LCG);
+System.out.printf("Xn_LCGDyDx = %d \n" ,Xn_LCGDyDx);		
+System.out.printf("Xn_LCG3 = %d \n" ,Xn_LCG3);
+System.out.printf("Xn_LCGDyDx4= %d \n",Xn_LCGDyDx4);
+System.out.printf("Modulus = %d \n",Modulus);
+System.out.printf("NoOfBits = %d \n" ,NoOfBits);
+System.out.printf("MaxExponent = %s \n" ,MaxExponent);
+System.out.printf("ModulusEncrypt = %d \n",ModulusEncrypt);
 
-System.out.printf("STATSMOREDATAFACTOR = %d \n" ,MatrixGenerator.STATSMOREDATAFACTOR);	
-System.out.printf("ROWSDOE(1 + Sigma((i=1 to NV) (Li-1)) : Tip: Use ROWSDOERecommended ) = %d \n" ,MatrixGenerator.ROWSDOE);
-System.out.printf("UseLevelsFromFile (Remember to Update DOEColumninputLevelSignalNormal in data\\LevelValues Folder )= %s \n",MatrixGenerator.UseLevelsFromFile);
-System.out.printf("UseLevelsFromArray (Remember to Update Array InitLevels in Code) = %s \n",MatrixGenerator.UseLevelsFromArray);
-System.out.printf("UseFullFactorial = %s \n" ,MatrixGenerator.UseFullFactorial);
-System.out.printf("ClassicTaguchiAlg = %s \n" ,MatrixGenerator.ClassicTaguchiAlg);
-System.out.printf("LEVELS = %d \n" ,MatrixGenerator.LEVELS);		
-// High Level Variables for Signal Noise Nature
-System.out.print("High Level Variables for Signal \n");
-System.out.printf("HasSignal = %s \n",MatrixGenerator.HasSignal);
+System.out.printf("a = %d \n",a);
+System.out.printf("c = %d \n",c);
+System.out.printf("b = %d \n",b);
+System.out.printf("d = %d \n",d);
+System.out.printf("StudyType = %s \n",StudyType);
 System.out.print(System.lineSeparator());
     } catch(Exception HyperDOEse){ 
                             log.info("Exception: define Myfprintf");
@@ -127,36 +151,50 @@ System.out.printf("DOENew General Parameters Begin");
 System.out.print(System.lineSeparator());
 
 String Data;
-Data=MyPrompt( din, "Path", MatrixGenerator.Path );
-MatrixGenerator.Path=Data;
+Data=MyPrompt( din, "Path", Path );
+Path=Data;
 
-Data=MyPrompt( din, "Length", ("" +MatrixGenerator.Length+"") );
-MatrixGenerator.Length=Integer.parseInt(Data);
+Data=MyPrompt( din, "Xn_XOR", ("" +Xn_XOR+"") );
+Xn_XOR=Integer.parseInt(Data);
 
-Data=MyPrompt( din, "STATSMOREDATAFACTOR", (""+MatrixGenerator.STATSMOREDATAFACTOR+"") );
-MatrixGenerator.STATSMOREDATAFACTOR=Integer.parseInt(Data);	
+Data=MyPrompt( din, "Xn_LCG", (""+Xn_LCG+"") );
+Xn_LCG=Integer.parseInt(Data);
 
-Data=MyPrompt( din, "ROWSDOE", (""+MatrixGenerator.ROWSDOE+"") );
-MatrixGenerator.ROWSDOE=Integer.parseInt(Data);
+Data=MyPrompt( din, "Xn_LCGDyDx ", ("" + Xn_LCGDyDx  + "") );
+Xn_LCGDyDx =Integer.parseInt(Data);
 
-Data = MyPrompt(din, "UseLevelsFromFile", ("" + MatrixGenerator.UseLevelsFromFile + ""));
-MatrixGenerator.UseLevelsFromFile=Boolean.parseBoolean(Data);
+Data=MyPrompt( din, "Xn_LCG3", (""+Xn_LCG3+"") );
+Xn_LCG3=Integer.parseInt(Data);	
 
-Data = MyPrompt(din, "UseLevelsFromArray", ("" + MatrixGenerator.UseLevelsFromArray + ""));
-MatrixGenerator.UseLevelsFromArray=Boolean.parseBoolean(Data);
+Data = MyPrompt(din, "Xn_LCGDyDx4", ("" + Xn_LCGDyDx4 + ""));
+Xn_LCGDyDx4=Integer.parseInt(Data);
 
-Data=MyPrompt( din, "UseFullFactorial", ("" + MatrixGenerator.UseFullFactorial + "") );
-MatrixGenerator.UseFullFactorial=Boolean.parseBoolean(Data);
+Data = MyPrompt(din, "Modulus", ("" + Modulus + ""));
+Modulus=Integer.parseInt(Data);
 
-Data=MyPrompt( din, "ClassicTaguchiAlg", ("" + MatrixGenerator.ClassicTaguchiAlg + "") );
-MatrixGenerator.ClassicTaguchiAlg=Boolean.parseBoolean(Data);
+Data=MyPrompt( din, "NoOfBits", ("" + NoOfBits + "") );
+NoOfBits=Integer.parseInt(Data);
 
-Data=MyPrompt( din, "LEVELS", ("" + MatrixGenerator.LEVELS + "") );
-MatrixGenerator.LEVELS=Integer.parseInt(Data);
+Data=MyPrompt( din, "MaxExponent", ("" + MaxExponent  + "") );
+MaxExponent=Integer.parseInt(Data);
 
-// High Level Variables for Signal Noise Nature
-Data = MyPrompt(din, "HasSignal", ("" + MatrixGenerator.HasSignal + ""));
-MatrixGenerator.HasSignal=Boolean.parseBoolean(Data);
+Data = MyPrompt(din, "ModulusEncrypt", ("" + ModulusEncrypt + ""));
+ModulusEncrypt=Integer.parseInt(Data);
+
+Data = MyPrompt(din, "a", ("" + a + ""));
+a=Integer.parseInt(Data);
+
+Data = MyPrompt(din, "c", ("" + c + ""));
+c=Integer.parseInt(Data);
+
+Data = MyPrompt(din, "b", ("" + b + ""));
+b=Integer.parseInt(Data);
+
+Data = MyPrompt(din, "d", ("" + d + ""));
+d=Integer.parseInt(Data);
+
+Data = MyPrompt(din, "StudyType", ("" + StudyType + ""));
+StudyType=Data;
 
 System.out.print(System.lineSeparator());
 
@@ -180,19 +218,21 @@ if ((fpout = new PrintWriter(Path+"MicroGAinput" )) == null)
 		System.out.printf("Setup aborted.\n");
 		System.exit(1);
 	}
-fpout.printf("Path = %s \n" ,MatrixGenerator.Path);
-fpout.printf("Length = %d \n" ,MatrixGenerator.Length);
-fpout.printf("STATSMOREDATAFACTOR = %d \n" ,MatrixGenerator.STATSMOREDATAFACTOR);		
-fpout.printf("ROWSDOE = %d \n" ,MatrixGenerator.ROWSDOE);
-fpout.printf("UseLevelsFromFile = %s \n",MatrixGenerator.UseLevelsFromFile);
-fpout.printf("UseLevelsFromArray = %s \n",MatrixGenerator.UseLevelsFromArray);
-fpout.printf("UseFullFactorial = %s \n" ,MatrixGenerator.UseFullFactorial);
-fpout.printf("ClassicTaguchiAlg = %s \n" ,MatrixGenerator.ClassicTaguchiAlg);
-fpout.printf("LEVELS = %d \n" ,MatrixGenerator.LEVELS);
-
-// High Level Variables for Signal Noise Nature
-fpout.printf("HasSignal = %s \n",MatrixGenerator.HasSignal);
-
+fpout.printf("Path = %s \n" ,Path);
+fpout.printf("Xn_XOR = %d \n" ,Xn_XOR);
+fpout.printf("Xn_LCG = %d \n" ,Xn_LCG);
+fpout.printf("Xn_LCGDyDx = %d \n" ,Xn_LCGDyDx);
+fpout.printf("Xn_LCG3 = %d \n" ,Xn_LCG3);		
+fpout.printf("Xn_LCGDyDx4 = %d \n",Xn_LCGDyDx4);
+fpout.printf("Modulus = %d \n",Modulus);
+fpout.printf("NoOfBits = %d \n" ,NoOfBits);
+fpout.printf("MaxExponent = %d \n" ,MaxExponent);
+fpout.printf("ModulusEncrypt = %d \n",ModulusEncrypt);
+fpout.printf("a = %d \n",a);
+fpout.printf("c = %d \n",c);
+fpout.printf("b = %d \n",b);
+fpout.printf("d = %d \n",d);
+fpout.printf("StudyType = %d \n",StudyType);
 fpout.close();
 } catch(Exception HyperDOEse){ 
                             log.info("Exception: define Myfprintf");

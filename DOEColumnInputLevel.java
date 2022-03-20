@@ -5,11 +5,13 @@
  */
 package DOEMatrixGen;
 
+import Calculus.ConsoleColors;
 import static DOEMatrixGen.MatrixGenerator.LevelCntrlArrayGet;
 import static DOEMatrixGen.MatrixGenerator.LevelMaxIndex;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 /**
@@ -247,14 +249,14 @@ public class DOEColumnInputLevel {
                 log.info("DOEColumnDefine:Myfscanf_Signal:Entered:Matching Columns & Types");
                 if (InputType.equalsIgnoreCase("NormalInput")) {
                     if ((FlagReadCommon == true)&&(ReadCommSpec.equalsIgnoreCase("Common"))&&((InputGenere.equalsIgnoreCase("Common")))) {
-                        Name=ReadSection+ "_" + InputType + "_" + "Col_" + ObjectColNum + "_";
+                        Name=/*ReadSection+ "_" + InputType + "_" + */"Col_" + ObjectColNum + "_";
                     }
                     else if ((FlagReadCommon == true)&&(ReadCommSpec.equalsIgnoreCase("Specific")) && (InputGenere.equalsIgnoreCase("Specific")) ) {
                         Name=ProcessString(din, din.readLine());
                     }
                     else 
-                        Name=ReadSection+ "_" + InputType + "_" + "_Col_" + ObjectColNum + "_";
-                    MatrixGenerator.Name[ObjectColNum] = Name;
+                        Name=/*ReadSection+ "_" + InputType + "_" +*/"Col_" + ObjectColNum + "_";
+                    MatrixGenerator.NameCol[ObjectColNum] = Name;
                     Integer MyColNum = Integer.parseInt(ProcessString(din, din.readLine()));
                     Integer MyColType = Integer.parseInt(ProcessString(din, din.readLine()));
                     Integer MyColLevels = Integer.parseInt(ProcessString(din, din.readLine()));
@@ -268,7 +270,10 @@ public class DOEColumnInputLevel {
                     if (((ObjectColNum == MyColNum) && (MyColType == 5)) || (InputGenere.equalsIgnoreCase("Common"))) {
                         if (MyColLevels >= k) {
                             for (int i = 0; (i <= MyColLevels) && (i <= k); i++) {
-                                MatrixGenerator.PutLevelValuePair(ObjectColNum, i, Double.parseDouble(ProcessString(din, din.readLine())));
+                                String Temp=ProcessString(din, din.readLine());
+                                if((Pattern.matches("[\\-\\+]*[0-9\\.]+", Temp))&&(!Pattern.matches("[\\-\\+]*[a-zA-Z0-9]+", Temp))){
+                                    MatrixGenerator.PutLevelValuePair(ObjectColNum, i, Double.parseDouble(Temp));
+                                }
                             }
                         } else {
                             for (int i = MyColLevels; i <= k; i++) {
@@ -302,7 +307,7 @@ public class DOEColumnInputLevel {
                 System.out.print(System.lineSeparator());
                 System.out.printf("DOENew Level Values Begin");
                 System.out.print(System.lineSeparator());
-                System.out.printf("Name=" + MatrixGenerator.Name[ObjectColNum]);
+                System.out.printf("Name=" + MatrixGenerator.NameCol[ObjectColNum]);
                 System.out.print(System.lineSeparator());
                 for (int i = 1; i <= MatrixGenerator.LevelCntrlArrayGet(planeNum, ObjectColNum, MatrixGenerator.LevelMaxIndex); i++) {
                     System.out.println("planeNum=" + planeNum + " Signal:" + " " + InputType + " " + "Level=" + (i ) + "=" + MatrixGenerator.getLevelValuePair(ObjectColNum, i));
